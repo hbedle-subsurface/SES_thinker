@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Kind of Thinker Are You? | OU SES</title>
+<meta name="description" content="Six scenarios. Find out how your brain actually processes complexity — and what that has to do with one of the most interesting courses at OU.">
+
+<!--
+  FONT PAIRING:
+  Display: "Space Grotesk" (geometric, technical-adjacent but not cold — feels like a smart magazine)
+  Body: "DM Sans" (family consistency across all SES quizzes)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+<style>
+/* =====================
+   CSS CUSTOM PROPERTIES
+   ===================== */
+:root {
+  /* Palette: deep slate → charcoal → near-black, with electric lime accent */
+  --slate-deep: #0A1210;
+  --slate-mid:  #0F1C18;
+  --charcoal:   #121820;
+  --near-black: #080C0B;
+  --lime:       #A8E020;
+  --lime-bright:#C4F040;
+  --lime-dim:   #6A9010;
+  --off-white:  #E8EDE8;
+  --warm-white: #F2F5F0;
+  --muted:      rgba(232,237,232,0.5);
+
+  /* Result card palettes */
+  --cause-bg:     #080F18;
+  --cause-mid:    #0E1A28;
+  --cause-accent: #50A0E8;
+  --cause-text:   #A8CCF0;
+
+  --ripple-bg:    #0A1008;
+  --ripple-mid:   #141E10;
+  --ripple-accent:#70D060;
+  --ripple-text:  #B8EAB0;
+
+  --stake-bg:     #180810;
+  --stake-mid:    #260E18;
+  --stake-accent: #E06090;
+  --stake-text:   #F0B0C8;
+
+  --time-bg:      #100A00;
+  --time-mid:     #1E1400;
+  --time-accent:  #E8A030;
+  --time-text:    #F5D090;
+
+  --feedback-bg:  #0A0818;
+  --feedback-mid: #140F28;
+  --feedback-accent: #9060E8;
+  --feedback-text:   #CCB0F8;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --radius:    4px;
+  --radius-lg: 12px;
+}
+
+/* =====================
+   RESET + BASE
+   ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--off-white);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  /* Deep slate-green → charcoal → near-black */
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 0%,   rgba(168, 224, 32, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 100% 90%, rgba(10, 18, 16, 0.95)  0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 40% 50%,  rgba(15, 28, 24, 0.8)   0%, transparent 65%),
+    linear-gradient(155deg, #080E0C 0%, #0C1510 40%, #080C0B 100%);
+  background-attachment: fixed;
+}
+
+/* grain */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+/* subtle grid overlay — feels like graph paper, thinking space */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(168,224,32,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168,224,32,0.018) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* =====================
+   LAYOUT
+   ===================== */
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* =====================
+   INTRO
+   ===================== */
+#screen-intro {
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+
+.intro-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.intro-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--lime);
+}
+
+.intro-headline {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 11vw, 80px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--warm-white);
+  margin-bottom: 8px;
+}
+
+.intro-headline em {
+  font-style: normal;
+  color: var(--lime);
+  display: block;
+}
+
+.intro-sub {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 3.8vw, 22px);
+  font-weight: 600;
+  color: rgba(232,237,232,0.45);
+  margin-bottom: 32px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.intro-body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(232,237,232,0.7);
+  max-width: 500px;
+  margin-bottom: 36px;
+}
+
+.intro-body strong { color: var(--off-white); font-weight: 500; }
+
+/* thinking styles preview chips */
+.thinking-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 44px;
+}
+
+.thinking-chip {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(168,224,32,0.07);
+  border: 1px solid rgba(168,224,32,0.18);
+  color: rgba(232,237,232,0.65);
+  letter-spacing: 0.02em;
+}
+
+.btn-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--lime);
+  color: #080C08;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 18px 36px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 32px rgba(168, 224, 32, 0.2);
+}
+
+.btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(168, 224, 32, 0.35);
+  background: var(--lime-bright);
+}
+
+.btn-start:focus-visible { outline: 2px solid var(--off-white); outline-offset: 3px; }
+
+.intro-disclaimer {
+  margin-top: 20px;
+  font-size: 12px;
+  color: rgba(232,237,232,0.28);
+  font-style: italic;
+}
+
+.intro-deco {
+  margin: 48px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0.15;
+}
+.intro-deco::before, .intro-deco::after {
+  content: ''; flex: 1; height: 1px; background: var(--off-white);
+}
+.intro-deco-text {
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap;
+}
+
+/* =====================
+   QUIZ
+   ===================== */
+#screen-quiz { padding-top: 40px; padding-bottom: 80px; }
+
+.progress-wrap { margin-bottom: 40px; }
+
+.progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.progress-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(232,237,232,0.35);
+  font-weight: 500;
+}
+
+.progress-count {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--lime);
+  letter-spacing: -0.01em;
+}
+
+.progress-track {
+  height: 3px;
+  background: rgba(232,237,232,0.07);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--lime-dim), var(--lime-bright));
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 10px rgba(168, 224, 32, 0.4);
+}
+
+/* scenario label */
+.scenario-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--lime);
+  margin-bottom: 16px;
+  font-family: var(--font-body);
+}
+
+.scenario-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.question-text {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 5.5vw, 32px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--warm-white);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+/* scenario context block */
+.scenario-context {
+  background: rgba(168,224,32,0.05);
+  border: 1px solid rgba(168,224,32,0.12);
+  border-left: 3px solid var(--lime-dim);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(232,237,232,0.65);
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+.question-sub {
+  font-size: 14px;
+  color: rgba(232,237,232,0.45);
+  margin-bottom: 28px;
+  line-height: 1.55;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+  list-style: none;
+}
+
+.option-btn {
+  width: 100%;
+  text-align: left;
+  background: rgba(232,237,232,0.03);
+  border: 1.5px solid rgba(232,237,232,0.09);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  cursor: pointer;
+  color: rgba(232,237,232,0.75);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(168,224,32,0.08), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: var(--radius-lg);
+}
+
+.option-letter {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius);
+  background: rgba(232,237,232,0.06);
+  border: 1px solid rgba(232,237,232,0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: all 0.15s ease;
+  margin-top: 1px;
+  font-family: var(--font-display);
+}
+
+.option-text { flex: 1; position: relative; z-index: 1; }
+
+.option-btn:hover {
+  border-color: rgba(168,224,32,0.35);
+  background: rgba(168,224,32,0.06);
+  color: var(--off-white);
+  transform: translateX(2px);
+}
+
+.option-btn:hover::before { opacity: 1; }
+
+.option-btn:hover .option-letter {
+  background: rgba(168,224,32,0.14);
+  border-color: rgba(168,224,32,0.4);
+  color: var(--lime);
+}
+
+.option-btn[aria-pressed="true"] {
+  background: rgba(168,224,32,0.1);
+  border-color: var(--lime);
+  color: var(--warm-white);
+  transform: translateX(4px);
+  box-shadow: inset 0 0 0 1px rgba(168,224,32,0.2), 0 2px 20px rgba(168,224,32,0.08);
+}
+
+.option-btn[aria-pressed="true"]::before { opacity: 1; }
+
+.option-btn[aria-pressed="true"] .option-letter {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: #080C08;
+  box-shadow: 0 0 10px rgba(168,224,32,0.4);
+}
+
+.option-btn:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
+.quiz-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-back {
+  background: transparent;
+  border: 1.5px solid rgba(232,237,232,0.15);
+  border-radius: var(--radius);
+  color: rgba(232,237,232,0.42);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-back:hover { border-color: rgba(232,237,232,0.32); color: var(--off-white); }
+.btn-back:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
+.btn-next {
+  background: var(--lime);
+  border: none;
+  border-radius: var(--radius);
+  color: #080C08;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 14px 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 16px rgba(168,224,32,0.18);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.btn-next.enabled { opacity: 1; pointer-events: auto; }
+.btn-next.enabled:hover { transform: translateY(-1px); background: var(--lime-bright); box-shadow: 0 4px 24px rgba(168,224,32,0.3); }
+.btn-next:focus-visible { outline: 2px solid var(--off-white); outline-offset: 2px; }
+
+.question-block { animation: slideInQ 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes slideInQ {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* =====================
+   RESULT
+   ===================== */
+#screen-result { padding-top: 40px; padding-bottom: 80px; }
+
+.result-reveal { animation: revealResult 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes revealResult {
+  from { opacity: 0; transform: scale(0.94) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.result-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.result-card-hero {
+  padding: 40px 28px 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card-hero::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, currentColor 0%, transparent 70%);
+  opacity: 0.06;
+  animation: heroGlow 5s ease-in-out infinite alternate;
+}
+
+@keyframes heroGlow {
+  from { transform: scale(1); }
+  to   { transform: scale(1.5) translate(-5%, 5%); }
+}
+
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  font-family: var(--font-body);
+}
+
+.result-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 9vw, 54px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+.result-tagline {
+  font-size: clamp(15px, 3.8vw, 18px);
+  font-weight: 300;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* the SES name for your thinking style */
+.result-name-strip {
+  padding: 16px 28px;
+  background: rgba(0,0,0,0.25);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.result-name-label {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.45;
+  white-space: nowrap;
+  font-family: var(--font-body);
+}
+
+.result-name-value {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.result-card-body {
+  padding: 28px;
+  background: rgba(0,0,0,0.28);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.result-section { margin-bottom: 28px; }
+.result-section:last-child { margin-bottom: 0; }
+
+.result-section-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.5;
+}
+
+.result-section-label::after { content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.3; }
+
+.result-description { font-size: 15px; line-height: 1.72; opacity: 0.9; }
+
+/* course callout — the reveal moment */
+.course-callout {
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-top: 8px;
+}
+
+.course-callout-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+  opacity: 0.6;
+}
+
+.course-callout-name {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.course-callout-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.75;
+  margin-bottom: 10px;
+}
+
+.course-callout-meta {
+  font-size: 12px;
+  opacity: 0.5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.course-callout-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* cert block */
+.cert-block {
+  font-size: 15px;
+  line-height: 1.65;
+  opacity: 0.85;
+}
+
+/* neighbors */
+.neighbors-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.neighbor-card {
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.neighbor-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.neighbor-note { font-size: 12px; line-height: 1.5; opacity: 0.6; }
+
+/* email + footer */
+.email-nudge {
+  font-size: 14px;
+  color: rgba(232,237,232,0.48);
+  margin-bottom: 10px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.btn-email {
+  width: 100%;
+  background: transparent;
+  border: 1.5px solid rgba(232,237,232,0.18);
+  border-radius: var(--radius);
+  color: var(--off-white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  padding: 18px 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+  line-height: 1.45;
+}
+
+.btn-email:hover { border-color: var(--lime); background: rgba(168,224,32,0.05); }
+.btn-email:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
+.btn-email-icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(168,224,32,0.1);
+  border: 1px solid rgba(168,224,32,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lime);
+}
+
+.btn-email-copy strong {
+  display: block;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--lime);
+  margin-bottom: 2px;
+}
+
+.btn-email-copy span { font-size: 12.5px; color: rgba(232,237,232,0.42); }
+
+.result-footer { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.btn-retake {
+  flex: 1;
+  min-width: 140px;
+  background: transparent;
+  border: 1.5px solid rgba(232,237,232,0.16);
+  border-radius: var(--radius);
+  color: rgba(232,237,232,0.55);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-retake:hover { border-color: rgba(232,237,232,0.32); color: var(--off-white); }
+.btn-retake:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
+.btn-website {
+  flex: 1;
+  min-width: 140px;
+  background: var(--lime);
+  border: none;
+  border-radius: var(--radius);
+  color: #080C08;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 14px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-website:hover { background: var(--lime-bright); transform: translateY(-1px); }
+.btn-website:focus-visible { outline: 2px solid var(--off-white); outline-offset: 2px; }
+
+/* =====================
+   RESULT THEMES
+   ===================== */
+.result-cause .result-card-hero {
+  background: linear-gradient(145deg, var(--cause-bg) 0%, var(--cause-mid) 100%);
+  color: var(--cause-text);
+}
+.result-cause .result-card-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(80,160,232,0.025) 0px, rgba(80,160,232,0.025) 1px, transparent 1px, transparent 40px);
+}
+.result-cause .result-badge    { background: rgba(80,160,232,0.14); color: var(--cause-accent); }
+.result-cause .result-card-body { color: var(--cause-text); }
+.result-cause .result-name-strip { color: var(--cause-text); }
+.result-cause .result-name-value { color: var(--cause-accent); }
+.result-cause .result-section-label { color: var(--cause-accent); }
+.result-cause .course-callout  { background: rgba(80,160,232,0.07); border: 1px solid rgba(80,160,232,0.18); }
+.result-cause .course-callout-eyebrow { color: var(--cause-accent); }
+
+.result-ripple .result-card-hero {
+  background: linear-gradient(145deg, var(--ripple-bg) 0%, var(--ripple-mid) 100%);
+  color: var(--ripple-text);
+}
+.result-ripple .result-card-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 80% 80%, rgba(112,208,96,0.08), transparent);
+}
+.result-ripple .result-badge    { background: rgba(112,208,96,0.13); color: var(--ripple-accent); }
+.result-ripple .result-card-body { color: var(--ripple-text); }
+.result-ripple .result-name-strip { color: var(--ripple-text); }
+.result-ripple .result-name-value { color: var(--ripple-accent); }
+.result-ripple .result-section-label { color: var(--ripple-accent); }
+.result-ripple .course-callout  { background: rgba(112,208,96,0.06); border: 1px solid rgba(112,208,96,0.18); }
+.result-ripple .course-callout-eyebrow { color: var(--ripple-accent); }
+
+.result-stake .result-card-hero {
+  background: linear-gradient(145deg, var(--stake-bg) 0%, var(--stake-mid) 100%);
+  color: var(--stake-text);
+}
+.result-stake .result-card-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 40% at 20% 20%, rgba(224,96,144,0.1), transparent);
+}
+.result-stake .result-badge    { background: rgba(224,96,144,0.13); color: var(--stake-accent); }
+.result-stake .result-card-body { color: var(--stake-text); }
+.result-stake .result-name-strip { color: var(--stake-text); }
+.result-stake .result-name-value { color: var(--stake-accent); }
+.result-stake .result-section-label { color: var(--stake-accent); }
+.result-stake .course-callout  { background: rgba(224,96,144,0.06); border: 1px solid rgba(224,96,144,0.18); }
+.result-stake .course-callout-eyebrow { color: var(--stake-accent); }
+
+.result-time .result-card-hero {
+  background: linear-gradient(145deg, var(--time-bg) 0%, var(--time-mid) 100%);
+  color: var(--time-text);
+}
+.result-time .result-card-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(180deg, rgba(232,160,48,0.025) 0px, rgba(232,160,48,0.025) 1px, transparent 1px, transparent 28px);
+}
+.result-time .result-badge    { background: rgba(232,160,48,0.13); color: var(--time-accent); }
+.result-time .result-card-body { color: var(--time-text); }
+.result-time .result-name-strip { color: var(--time-text); }
+.result-time .result-name-value { color: var(--time-accent); }
+.result-time .result-section-label { color: var(--time-accent); }
+.result-time .course-callout  { background: rgba(232,160,48,0.06); border: 1px solid rgba(232,160,48,0.18); }
+.result-time .course-callout-eyebrow { color: var(--time-accent); }
+
+.result-feedback .result-card-hero {
+  background: linear-gradient(145deg, var(--feedback-bg) 0%, var(--feedback-mid) 100%);
+  color: var(--feedback-text);
+}
+.result-feedback .result-card-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(144,96,232,0.08), transparent);
+}
+.result-feedback .result-badge    { background: rgba(144,96,232,0.13); color: var(--feedback-accent); }
+.result-feedback .result-card-body { color: var(--feedback-text); }
+.result-feedback .result-name-strip { color: var(--feedback-text); }
+.result-feedback .result-name-value { color: var(--feedback-accent); }
+.result-feedback .result-section-label { color: var(--feedback-accent); }
+.result-feedback .course-callout  { background: rgba(144,96,232,0.06); border: 1px solid rgba(144,96,232,0.18); }
+.result-feedback .course-callout-eyebrow { color: var(--feedback-accent); }
+
+/* =====================
+   DESKTOP
+   ===================== */
+@media (min-width: 600px) {
+  .result-card-hero { padding: 48px 36px 40px; }
+  .result-card-body { padding: 32px 36px; }
+  .result-name-strip { padding: 18px 36px; }
+  .options-list { gap: 12px; }
+}
+
+@media (min-width: 768px) {
+  #screen-intro { padding-top: 80px; }
+  .app { padding: 0 32px; }
+  .thinking-chips { max-width: 480px; }
+}
+
+:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <defs>
+    <symbol id="icon-arrow-right" viewBox="0 0 16 16">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 16 16">
+      <path d="M13 8H3M7 12L3 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="icon-refresh" viewBox="0 0 16 16">
+      <path d="M2 8a6 6 0 1 0 1.5-4M2 4v4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="icon-external" viewBox="0 0 16 16">
+      <path d="M10 2h4v4M14 2L8 8M7 4H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="icon-envelope" viewBox="0 0 20 20">
+      <rect x="2" y="5" width="16" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <path d="M2 7l8 5 8-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="app" role="main">
+
+  <!-- INTRO -->
+  <section id="screen-intro" class="screen active" aria-label="Quiz introduction">
+    <p class="intro-eyebrow">OU Sustainable Energy Systems</p>
+
+    <h1 class="intro-headline">What kind of<br><em>thinker</em><br>are you?</h1>
+    <p class="intro-sub">Not your major. Not your GPA. How your brain actually works when something gets complicated.</p>
+
+    <p class="intro-body">
+      Some people instinctively ask <em>why did this happen</em>. Others immediately think about who gets hurt. Others see the next problem before the current one is solved. <strong>You already do one of these.</strong> You've been doing it since before you had a name for it. Six scenarios. Find out which one you are.
+    </p>
+
+    <div class="thinking-chips">
+      <span class="thinking-chip">The Cause Tracer</span>
+      <span class="thinking-chip">The Ripple Spotter</span>
+      <span class="thinking-chip">The Stakeholder Scanner</span>
+      <span class="thinking-chip">The Time Zoomer</span>
+      <span class="thinking-chip">The Feedback Finder</span>
+    </div>
+
+    <button class="btn-start" id="btn-start" type="button">
+      Find out
+      <svg width="18" height="18" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+    </button>
+
+    <p class="intro-disclaimer">No data collected. No email required. Just a quiz.</p>
+    <div class="intro-deco"><span class="intro-deco-text">ou.edu/mcee/ses</span></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="screen-quiz" class="screen" aria-label="Quiz questions" aria-live="polite">
+    <div class="progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="6" id="progress-bar" aria-label="Quiz progress">
+      <div class="progress-top">
+        <span class="progress-label">Progress</span>
+        <span class="progress-count" id="progress-count">1 of 6</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="question-block" id="question-block"></div>
+    <nav class="quiz-nav" aria-label="Question navigation">
+      <button class="btn-back" id="btn-back" type="button" aria-label="Go back">
+        <svg width="16" height="16" aria-hidden="true"><use href="#icon-arrow-left"/></svg>
+        Back
+      </button>
+      <button class="btn-next" id="btn-next" type="button" aria-disabled="true">
+        Next
+        <svg width="16" height="16" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+      </button>
+    </nav>
+  </section>
+
+  <!-- RESULT -->
+  <section id="screen-result" class="screen" aria-label="Your result" aria-live="polite">
+    <div class="result-reveal" id="result-content"></div>
+  </section>
+
+</div>
+
+<script>
+/* =====================================================================
+   QUIZ DATA
+   Categories: cause, ripple, stake, time, feedback
+
+   Design principle: every question is a scenario with zero prior
+   knowledge required. The question is always "what do you notice
+   first" or "what's your gut reaction" — not "what would you do."
+   The result names the thinking style the student just demonstrated.
+   ===================================================================== */
+
+const QUESTIONS = [
+  {
+    id: 1,
+    scenario: "Closer to home",
+    context: null,
+    text: "Your friend group is arguing about something -- a decision, a campus policy, a thing that happened. You're all frustrated but for different reasons. What's your move?",
+    sub: null,
+    options: [
+      { text: "You want to figure out how it got to this point before anyone decides anything. Solutions built on wrong assumptions don't work.",
+        scores: { cause: 4, time: 1 } },
+      { text: "You're already thinking about what happens if the group goes with Option A. Not just the obvious thing -- the thing after that.",
+        scores: { ripple: 4, feedback: 1 } },
+      { text: "You notice someone in the group is getting steamrolled and you can't focus on anything else until that's addressed.",
+        scores: { stake: 4, ripple: 1 } },
+      { text: "You can already see how whatever they decide is going to create the next argument. You're almost tired of it before it starts.",
+        scores: { feedback: 4, cause: 1 } },
+      { text: "You find yourself thinking about how your friend group handled something similar two years ago and whether anyone learned anything.",
+        scores: { time: 4, stake: 1 } },
+      { text: "You're quiet during it but you process everything and have fully formed opinions about 30 minutes later.",
+        scores: { cause: 2, stake: 2 } }
+    ]
+  },
+  {
+    id: 2,
+    scenario: "Scenario",
+    context: "Gas prices spike 40% in two weeks. Your feed is full of hot takes. Everyone's certain they know why.",
+    text: "What's actually going through your head?",
+    sub: null,
+    options: [
+      { text: "All of these explanations can't be right. You want the actual cause, not the most satisfying story.",
+        scores: { cause: 4, feedback: 1 } },
+      { text: "Okay but what does this do to everything downstream -- food, rent, the people who drive an hour to work.",
+        scores: { ripple: 4, stake: 1 } },
+      { text: "This isn't hitting everyone the same way. Who's actually getting crushed by this.",
+        scores: { stake: 4, ripple: 1 } },
+      { text: "If the government steps in to fix it, what's the thing that breaks next.",
+        scores: { feedback: 4, ripple: 1 } },
+      { text: "This has happened before and it played out a specific way. Nobody in this conversation seems to know that.",
+        scores: { time: 4, cause: 1 } },
+      { text: "You mute the conversation. Something about the certainty of everyone's takes is the most suspicious part.",
+        scores: { cause: 2, feedback: 2 } }
+    ]
+  },
+  {
+    id: 3,
+    scenario: "Real talk",
+    context: null,
+    text: "In a group conversation about something genuinely complicated -- a campus issue, a news story, a class debate -- what role do you end up playing?",
+    sub: null,
+    options: [
+      { text: "The one going backward. \"Wait -- how did we actually get here.\"",
+        scores: { cause: 4, time: 1 } },
+      { text: "The one thinking forward. \"If that happens, then this happens, then nobody's going to like what comes after that.\"",
+        scores: { ripple: 4, feedback: 1 } },
+      { text: "The one asking who's missing. \"Has anyone talked to the people this actually affects.\"",
+        scores: { stake: 4, ripple: 1 } },
+      { text: "The one flagging the next problem. \"The fix is going to cause the exact same issue in a different form.\"",
+        scores: { feedback: 4, cause: 1 } },
+      { text: "The one with context. \"This is basically the same thing that happened in [year]. Here's what changed.\"",
+        scores: { time: 4, stake: 1 } },
+      { text: "The one who stays quiet and then sends a very long message in the group chat at midnight.",
+        scores: { cause: 2, stake: 2 } }
+    ]
+  },
+  {
+    id: 4,
+    scenario: "Scenario",
+    context: "A new university policy rolls out that's supposed to make something better. A semester later, students are more frustrated than before.",
+    text: "Your first thought is:",
+    sub: null,
+    options: [
+      { text: "They diagnosed the wrong problem. The thing they fixed wasn't actually what was broken.",
+        scores: { cause: 4, feedback: 1 } },
+      { text: "Something downstream got worse when they fixed this. They only looked at one part of the system.",
+        scores: { ripple: 4, cause: 1 } },
+      { text: "The people who designed this policy and the students living under it don't have the same experience of this campus.",
+        scores: { stake: 4, time: 1 } },
+      { text: "The policy changed how people behave in a way that cancelled out what it was trying to do.",
+        scores: { feedback: 4, ripple: 1 } },
+      { text: "They wanted a fast win. Actual fixes to this kind of thing take years.",
+        scores: { time: 4, feedback: 1 } },
+      { text: "You want to see whether anyone actually studied this before rolling it out.",
+        scores: { cause: 3, ripple: 2 } }
+    ]
+  },
+  {
+    id: 5,
+    scenario: "Just you",
+    context: null,
+    text: "Pick the thing that makes you want to jump into a conversation. The one you can't just let go.",
+    sub: null,
+    options: [
+      { text: "Everyone's debating solutions and nobody has agreed on what actually caused the problem.",
+        scores: { cause: 4, feedback: 1 } },
+      { text: "Nobody's thinking about what happens after the plan works. The second chapter is the scary one.",
+        scores: { ripple: 4, time: 1 } },
+      { text: "The whole conversation is about data and systems and nobody has mentioned a single actual person.",
+        scores: { stake: 4, ripple: 1 } },
+      { text: "Someone's proposing a solution that is clearly going to create a new version of the same problem.",
+        scores: { feedback: 4, cause: 1 } },
+      { text: "People are treating something as new and unprecedented when it's happened at least twice before.",
+        scores: { time: 4, stake: 1 } },
+      { text: "Everyone has clearly already decided and the conversation is just theater at this point.",
+        scores: { stake: 3, feedback: 2 } }
+    ]
+  },
+  {
+    id: 6,
+    scenario: "Last one",
+    context: "A major company announces it's going carbon neutral by 2040. Environmental groups are skeptical. The company says the critics just don't understand the plan.",
+    text: "What's the first thing you actually want to know?",
+    sub: null,
+    options: [
+      { text: "What's actually causing their emissions right now and whether this plan addresses those specific things.",
+        scores: { cause: 4, ripple: 1 } },
+      { text: "What happens to their workers, suppliers, and the towns built around their facilities.",
+        scores: { ripple: 4, stake: 1 } },
+      { text: "Who gets the credit if they hit the target and who actually bears the cost of getting there.",
+        scores: { stake: 4, cause: 1 } },
+      { text: "Whether \"carbon neutral\" means what it sounds like or if it's creative accounting.",
+        scores: { feedback: 4, time: 1 } },
+      { text: "How many companies have made this exact announcement and what actually happened.",
+        scores: { time: 4, feedback: 1 } },
+      { text: "What the environmental groups are specifically saying -- because \"they don't understand\" is a tell.",
+        scores: { cause: 3, stake: 2 } }
+    ]
+  }
+];
+
+const RESULTS = {
+  cause: {
+    id: 'cause',
+    themeClass: 'result-cause',
+    badge: 'The Cause Tracer',
+    title: 'The Cause Tracer',
+    tagline: "While everyone else is arguing about solutions, you're still trying to figure out what actually caused the problem.",
+    systemsName: "Causal Loop Thinking",
+    systemsNote: "That's the systems term for what you do naturally.",
+    description: "You have a low tolerance for treating symptoms. When something goes wrong, your brain goes backward -- what caused this, what caused that, what's the actual origin. It's not that you're slow to form opinions. It's that you won't build on a foundation you haven't checked. In complex systems like energy, economics, or public health, this matters enormously. Most policy failures trace back to misdiagnosed causes -- someone fixed the wrong thing confidently, and the real problem kept going. The Cause Tracer is the person who slows that down. You're probably the one in group conversations who says \"wait, but why did that happen\" right when everyone else is ready to move on. That's not obstruction. That's the most important question in the room.",
+    course: {
+      name: "SES 2123: Energy in Society",
+      full: "Energy in Society: A Systems Perspective",
+      desc: "This course is built around exactly your instinct. It traces how the global energy system got to where it is — what decisions were made, what caused what, and how things that seem separate are actually connected. You'll spend a semester following cause-and-effect chains through history, economics, politics, and culture. No engineering background needed.",
+      gened: "Gen Ed III-SS (Social Science)",
+      prereq: "No prerequisites",
+      instructor: "Robert Lifset"
+    },
+    cert: "The SES Certificate is 15 credits, open to all majors, with electives across policy, business, communications, technology, law, and social aspects. Two core courses count toward Gen Ed requirements. Scholarships available: up to $1,000, no GPA minimum, 20 awards for 2026-27. SES@ou.edu, ou.edu/mcee/ses",
+    neighbors: [
+      { title: 'The Time Zoomer', note: "You both want context before conclusions. Different directions — you go backward, they go long." },
+      { title: 'The Feedback Finder', note: "You find the root cause. They watch what the solution does next. Good sequence." }
+    ]
+  },
+  ripple: {
+    id: 'ripple',
+    themeClass: 'result-ripple',
+    badge: 'The Ripple Spotter',
+    title: 'The Ripple Spotter',
+    tagline: "If that happens, then this happens, then this other thing happens. You're already three steps ahead.",
+    systemsName: "Second-Order Effects Thinking",
+    systemsNote: "Systems thinkers call it second-order effects. You just call it obvious.",
+    description: "You can't look at a plan without modeling what it does next. Not the intended effect -- the unintended one. You ran a cause-and-effect chain in your head just now that most people in the room won't run until the consequences show up and surprise them. A new power plant affects property values, local hiring, air quality, political alliances, and grid stability -- sometimes all at once. Most people clock one of those. You clock all of them. In a world that keeps being shocked by the second-order effects of its own decisions, that's a genuinely rare thing.",
+    course: {
+      name: "SES 2123: Energy in Society",
+      full: "Energy in Society: A Systems Perspective",
+      desc: "SES 2123 is a course about how decisions in the energy system create consequences that ripple through economics, society, politics, and culture — often in ways nobody planned. It's the course that formalizes the kind of thinking you're already doing. History, economics, philosophy, and current events, all through the lens of how one thing affects everything else.",
+      gened: "Gen Ed III-SS (Social Science)",
+      prereq: "No prerequisites",
+      instructor: "Robert Lifset"
+    },
+    cert: "The SES Certificate is 15 credits, open to all majors. Both core courses satisfy Gen Ed requirements. Electives span policy, technology, business, communications, and social aspects. Scholarships: up to $1,000, no GPA minimum, 20 awards for 2026-27. SES@ou.edu, ou.edu/mcee/ses",
+    neighbors: [
+      { title: 'The Feedback Finder', note: "You see what happens next. They see what happens when that loops back and bites you." },
+      { title: 'The Stakeholder Scanner', note: "You map the ripples. They track who each ripple actually hits." }
+    ]
+  },
+  stake: {
+    id: 'stake',
+    themeClass: 'result-stake',
+    badge: 'The Stakeholder Scanner',
+    title: 'The Stakeholder Scanner',
+    tagline: "You notice who's in the room. And who isn't.",
+    systemsName: "Stakeholder Analysis",
+    systemsNote: "In systems thinking, it's called stakeholder analysis. You do it without being asked.",
+    description: "Before you engage with any problem, you scan the room -- literally or figuratively. Who has power here. Who's affected but not represented. Whose interests are being framed as universal when they're actually specific. You've been doing this your whole life without having a name for it. It's not cynicism -- it's pattern recognition. The people who make decisions and the people who live with them are rarely the same people, and that gap explains most of what goes wrong. A wind farm gets approved -- on whose land, with whose consent, generating revenue for whom. A power grid fails during a heat wave -- which neighborhoods lose power first and why. You're the person asking those questions before they become the story.",
+    course: {
+      name: "SES 2123: Energy in Society",
+      full: "Energy in Society: A Systems Perspective",
+      desc: "SES 2123 examines energy as a system shaped by people with competing interests, histories, and power. It covers how energy decisions get made, who makes them, and who lives with the consequences. The course draws on history, political science, economics, and sociology. No background in energy or science required.",
+      gened: "Gen Ed III-SS (Social Science)",
+      prereq: "No prerequisites",
+      instructor: "Robert Lifset"
+    },
+    cert: "The SES Certificate is 15 credits, open to all majors, with a specific social aspects track for stakeholder-oriented work. Scholarships: up to $1,000, no GPA minimum, 20 awards for 2026-27. SES@ou.edu, ou.edu/mcee/ses",
+    neighbors: [
+      { title: 'The Ripple Spotter', note: "They map what happens next. You map who it happens to." },
+      { title: 'The Cause Tracer', note: "You both ask questions most people skip. Different entry points, same rigor." }
+    ]
+  },
+  time: {
+    id: 'time',
+    themeClass: 'result-time',
+    badge: 'The Time Zoomer',
+    title: 'The Time Zoomer',
+    tagline: "You instinctively switch between the short view and the long view. Most people are stuck in one.",
+    systemsName: "Temporal Dynamics",
+    systemsNote: "Systems thinkers call it temporal dynamics — the way a system behaves differently at different time horizons.",
+    description: "You've noticed that most arguments about current events are actually arguments about time. The person saying a policy works and the person saying it doesn't are often measuring over different horizons and neither of them realizes it. You zoom out naturally. \"This happened before\" or \"what does this look like in twenty years\" -- those are your instincts. They make you quieter in fast conversations and more useful in the ones that actually matter. The energy transition is fundamentally a time-horizon problem. Coal is cheap short-term, catastrophic long-term. Renewables are expensive to build, cheap to run. Carbon capture takes decades to show results. Nuclear plants take fifteen years to build. Every energy debate is at least partly about whose time horizon gets to count, and you're already thinking about that.",
+    course: {
+      name: "SES 2123: Energy in Society",
+      full: "Energy in Society: A Systems Perspective",
+      desc: "SES 2123 spans centuries of energy history while constantly connecting back to the present. It's built for the kind of thinking that holds multiple time horizons simultaneously -- understanding what the coal era looked like while thinking about what decisions made today will look like to someone in 2075. History, economics, philosophy, and systems all in one course.",
+      gened: "Gen Ed III-SS (Social Science)",
+      prereq: "No prerequisites",
+      instructor: "Robert Lifset"
+    },
+    cert: "The SES Certificate is 15 credits, open to all majors, with electives that span technology, policy, business, communications, and social aspects. Both core courses satisfy Gen Ed requirements. Scholarships: up to $1,000, no GPA minimum, 20 awards for 2026-27. SES@ou.edu, ou.edu/mcee/ses",
+    neighbors: [
+      { title: 'The Cause Tracer', note: "You both want context before conclusions. You look forward and back; they trace roots." },
+      { title: 'The Feedback Finder', note: "Feedback loops often only become visible over time. You two see the same problem differently." }
+    ]
+  },
+  feedback: {
+    id: 'feedback',
+    themeClass: 'result-feedback',
+    badge: 'The Feedback Finder',
+    title: 'The Feedback Finder',
+    tagline: "You can see when a solution is going to create the next version of the same problem. That's a rare and useful thing.",
+    systemsName: "Feedback Loop Analysis",
+    systemsNote: "In systems thinking, this is called feedback loop analysis. It's one of the hardest skills to teach — and you already have it.",
+    description: "You have a specific kind of pattern recognition: you notice when an intervention loops back on itself. Price goes up, people use less, price stabilizes, people use more, price goes up. You've watched it happen. In complex systems, this is called a feedback loop -- a response to a change that eventually undoes or amplifies the change. They're everywhere in energy. You spot the loop before it closes. Most people call it unexpected when it happens. You would have called it obvious about six months earlier.",
+    course: {
+      name: "SES 2123: Energy in Society",
+      full: "Energy in Society: A Systems Perspective",
+      desc: "SES 2123 spends a lot of time on exactly this -- the ways energy policy has responded to problems in ways that created new ones, and what that pattern tells us about how to make better decisions. It covers history, economics, political philosophy, and systems dynamics, without requiring any prior science or technical background.",
+      gened: "Gen Ed III-SS (Social Science)",
+      prereq: "No prerequisites",
+      instructor: "Robert Lifset"
+    },
+    cert: "The SES Certificate is 15 credits, open to all majors. Two core courses count toward Gen Ed requirements. Electives span technology, policy, business, communications, law, and social aspects. Scholarships: up to $1,000, no GPA minimum, 20 awards for 2026-27. SES@ou.edu, ou.edu/mcee/ses",
+    neighbors: [
+      { title: 'The Ripple Spotter', note: "They see second-order effects. You see when those effects loop back. Related skill, different focus." },
+      { title: 'The Cause Tracer', note: "You both resist simple narratives. They dig for roots; you watch what happens after the fix." }
+    ]
+  }
+};
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const state = {
+  current: 0,
+  answers: new Array(QUESTIONS.length).fill(null)
+};
+
+const $ = id => document.getElementById(id);
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.setAttribute('aria-hidden', 'true');
+  });
+  const t = $(id);
+  t.classList.add('active');
+  t.removeAttribute('aria-hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* =====================================================================
+   RENDER QUESTION
+   ===================================================================== */
+function renderQuestion(index) {
+  const q = QUESTIONS[index];
+  const block = $('question-block');
+  const selected = state.answers[index];
+  const letters = ['A','B','C','D','E','F'];
+
+  const pct = Math.round((index / QUESTIONS.length) * 100);
+  $('progress-fill').style.width = pct + '%';
+  $('progress-count').textContent = `${index + 1} of ${QUESTIONS.length}`;
+  $('progress-bar').setAttribute('aria-valuenow', index + 1);
+  $('btn-back').style.visibility = index === 0 ? 'hidden' : 'visible';
+
+  const isLast = index === QUESTIONS.length - 1;
+  $('btn-next').childNodes[0].textContent = isLast ? 'See my result ' : 'Next ';
+
+  const hasAnswer = selected !== null;
+  $('btn-next').classList.toggle('enabled', hasAnswer);
+  $('btn-next').setAttribute('aria-disabled', !hasAnswer);
+
+  const optHTML = q.options.map((opt, i) => `
+    <li role="none">
+      <button class="option-btn" type="button" role="button"
+        aria-pressed="${selected === i ? 'true' : 'false'}"
+        data-index="${i}">
+        <span class="option-letter" aria-hidden="true">${letters[i]}</span>
+        <span class="option-text">${opt.text}</span>
+      </button>
+    </li>
+  `).join('');
+
+  block.innerHTML = `
+    <p class="scenario-label">
+      <span class="scenario-dot" aria-hidden="true"></span>
+      ${q.scenario}
+    </p>
+    <h2 class="question-text">${q.text}</h2>
+    ${q.context ? `<div class="scenario-context" aria-label="Scenario context">${q.context}</div>` : ''}
+    ${q.sub ? `<p class="question-sub">${q.sub}</p>` : ''}
+    <ul class="options-list" role="list" aria-label="Answer options">${optHTML}</ul>
+  `;
+
+  block.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', () => selectOption(index, parseInt(btn.dataset.index)));
+  });
+
+  block.classList.remove('question-block');
+  void block.offsetWidth;
+  block.classList.add('question-block');
+}
+
+/* =====================================================================
+   SELECT / NAVIGATE / CALCULATE
+   ===================================================================== */
+function selectOption(qIndex, oIndex) {
+  state.answers[qIndex] = oIndex;
+  document.querySelectorAll('.option-btn').forEach((btn, i) => {
+    btn.setAttribute('aria-pressed', i === oIndex ? 'true' : 'false');
+  });
+  $('btn-next').classList.add('enabled');
+  $('btn-next').setAttribute('aria-disabled', 'false');
+}
+
+function goNext() {
+  if (state.answers[state.current] === null) return;
+  if (state.current === QUESTIONS.length - 1) { calculateResult(); return; }
+  state.current++;
+  renderQuestion(state.current);
+}
+
+function goBack() {
+  if (state.current === 0) return;
+  state.current--;
+  renderQuestion(state.current);
+}
+
+function calculateResult() {
+  const scores = { cause: 0, ripple: 0, stake: 0, time: 0, feedback: 0 };
+  QUESTIONS.forEach((q, qi) => {
+    const ai = state.answers[qi];
+    if (ai !== null) {
+      Object.entries(q.options[ai].scores).forEach(([cat, pts]) => {
+        scores[cat] = (scores[cat] || 0) + pts;
+      });
+    }
+  });
+  const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  showResult(winner);
+}
+
+/* =====================================================================
+   SHOW RESULT
+   ===================================================================== */
+function showResult(key) {
+  const r = RESULTS[key];
+
+  const neighborsHTML = r.neighbors.map(n => `
+    <div class="neighbor-card">
+      <p class="neighbor-title">${n.title}</p>
+      <p class="neighbor-note">${n.note}</p>
+    </div>
+  `).join('');
+
+  const emailBody = `Hi Nova,%0A%0AI just took the "What Kind of Thinker Are You" quiz and got "${r.title}." I'm curious whether the SES Certificate might connect to my degree. Can we talk about it?%0A%0AThanks`;
+
+  $('result-content').innerHTML = `
+    <div class="result-card ${r.themeClass}">
+      <div class="result-card-hero">
+        <div class="result-badge">${r.badge}</div>
+        <h1 class="result-title">${r.title}</h1>
+        <p class="result-tagline">${r.tagline}</p>
+      </div>
+      <div class="result-name-strip">
+        <span class="result-name-label">The systems term for this</span>
+        <span class="result-name-value">${r.systemsName}</span>
+      </div>
+      <div class="result-card-body">
+        <div class="result-section">
+          <p class="result-section-label">What this looks like</p>
+          <p class="result-description">${r.description}</p>
+        </div>
+        <div class="result-section">
+          <p class="result-section-label">The course that formalizes it</p>
+          <div class="course-callout">
+            <p class="course-callout-eyebrow">OU SES Certificate — Core Course</p>
+            <p class="course-callout-name">${r.course.full}</p>
+            <p class="course-callout-desc">${r.course.desc}</p>
+            <div class="course-callout-meta">
+              <span>${r.course.gened}</span>
+              <span>${r.course.prereq}</span>
+              <span>Instructor: ${r.course.instructor}</span>
+            </div>
+          </div>
+        </div>
+        <div class="result-section">
+          <p class="result-section-label">The certificate</p>
+          <p class="cert-block">${r.cert}</p>
+        </div>
+        <div class="result-section">
+          <p class="result-section-label">Thinkers like you</p>
+          <div class="neighbors-grid">${neighborsHTML}</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="email-nudge">Want to know which electives in the certificate fit your major? Nova can tell you in one email.</p>
+    <a class="btn-email"
+       href="mailto:SES@ou.edu?subject=Curious%20about%20SES&body=${emailBody}"
+       aria-label="Email SES to ask about the certificate">
+      <span class="btn-email-icon" aria-hidden="true">
+        <svg width="18" height="18"><use href="#icon-envelope"/></svg>
+      </span>
+      <span class="btn-email-copy">
+        <strong>Ask if it fits your major</strong>
+        <span>Opens an email to Nova at SES@ou.edu. Takes about 10 seconds.</span>
+      </span>
+    </a>
+
+    <div class="result-footer">
+      <button class="btn-retake" id="btn-retake" type="button">
+        <svg width="15" height="15" aria-hidden="true"><use href="#icon-refresh"/></svg>
+        Retake
+      </button>
+      <a class="btn-website" href="https://ou.edu/mcee/ses" target="_blank" rel="noopener noreferrer">
+        See the certificate
+        <svg width="14" height="14" aria-hidden="true"><use href="#icon-external"/></svg>
+      </a>
+    </div>
+  `;
+
+  $('btn-retake').addEventListener('click', resetQuiz);
+  showScreen('screen-result');
+}
+
+/* =====================================================================
+   RESET + INIT
+   ===================================================================== */
+function resetQuiz() {
+  state.current = 0;
+  state.answers.fill(null);
+  showScreen('screen-quiz');
+  renderQuestion(0);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('btn-start').addEventListener('click', () => {
+    showScreen('screen-quiz');
+    renderQuestion(0);
+  });
+  $('btn-next').addEventListener('click', goNext);
+  $('btn-back').addEventListener('click', goBack);
+});
+</script>
+</body>
+</html>
